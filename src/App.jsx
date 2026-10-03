@@ -1,13 +1,13 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Layout from './Layout';
 import Dashboard from './Dashboard';
 import AppInquilino from './AppInquilino';
 import AppAgente from './AppAgente';
-import AppPropietario from './AppPropietario'; // <-- 1. IMPORTADO AQUÍ
+import AppPropietario from './AppPropietario';
 
-// 1. PANTALLAS REALES (Archivos que ya existen en tu carpeta src)
+// ATENCIÓN: Si alguno de estos archivos no existe en tu carpeta src, la pantalla se verá blanca.
 import Propiedades from './Propiedades';
 import Interesados from './Interesados';
 import Perfil from './Perfil';
@@ -20,6 +20,7 @@ import Incidencias from './Incidencias';
 import Redes from './RedesSociales';
 import Configuracion from './Configuracion';
 
+// Componente por defecto si te falta armar alguna pantalla
 const PantallaEnConstruccion = ({ nombre }) => (
   <div className="flex flex-col items-center justify-center h-full p-8 text-zinc-500 bg-white m-6 rounded-2xl border border-zinc-200 shadow-sm">
     <h2 className="text-2xl font-bold text-zinc-900 mb-2">{nombre}</h2>
@@ -29,12 +30,13 @@ const PantallaEnConstruccion = ({ nombre }) => (
 
 export default function App() {
   return (
-    <HashRouter basename="/zxcvbnm">
+    // SE ELIMINÓ EL BASENAME AQUÍ
+    <HashRouter>
       <Routes>
         {/* APPS MÓVILES INDEPENDIENTES */}
         <Route path="/inquilino" element={<AppInquilino />} />
         <Route path="/agente" element={<AppAgente />} />
-        <Route path="/propietario" element={<AppPropietario />} /> {/* <-- 2. RUTA AGREGADA AQUÍ */}
+        <Route path="/propietario" element={<AppPropietario />} />
 
         {/* DASHBOARD WEB */}
         <Route path="/" element={<Layout />}>

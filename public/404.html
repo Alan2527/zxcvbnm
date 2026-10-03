@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/zxcvbnm/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plataforma PropTech</title>
+    
+    {/* Script de redirección para SPA en GitHub Pages */}
+    <script type="text/javascript">
+      var pathSegmentsToKeep = 1;
+      var l = window.location;
+      var route = l.pathname.split('/').slice(1 + pathSegmentsToKeep).join('/');
+      if (route.length > 0) {
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') +
+          '/?/' + route + (l.search ? '&' + l.search.slice(1) : '') + l.hash
+        );
+      }
+    </script>
+    
+    <script type="module" crossorigin src="/zxcvbnm/assets/index.js"></script>
+    <link rel="stylesheet" crossorigin href="/zxcvbnm/assets/index.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

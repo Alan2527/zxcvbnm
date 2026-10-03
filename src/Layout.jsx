@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { 
   Home, Building, Users, Settings, Bell, 
-  BarChart2, AlertCircle, Sparkles, DollarSign, Globe, Moon, Menu, X, Share2
+  BarChart2, AlertCircle, Sparkles, DollarSign, Globe, Moon, Menu, X, Share2,
+  User, LogOut
 } from 'lucide-react';
 
 export default function Layout() {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  // Estados para los desplegables del header
+  const [showLang, setShowLang] = useState(false);
+  const [showNotif, setShowNotif] = useState(false);
 
   const getHeaderTitle = () => {
     switch (location.pathname) {
@@ -22,6 +27,7 @@ export default function Layout() {
       case '/incidencias': return 'Centro de Incidencias';
       case '/redes': return 'Redes Sociales y Videos';
       case '/configuracion': return 'Configuración del Sistema';
+      case '/perfil': return 'Mi Perfil y Facturación';
       default: return 'Agencia PropTech';
     }
   };
@@ -41,28 +47,27 @@ export default function Layout() {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
+    <div className="flex h-screen bg-zinc-50 font-sans text-zinc-900 overflow-hidden">
       
-      {/* Fondo oscuro en móvil cuando el menú está abierto */}
       {sidebarOpen && (
-        <div onClick={() => setSidebarOpen(false)} className="fixed inset-0 bg-black/50 z-40 lg:hidden" />
+        <div onClick={() => setSidebarOpen(false)} className="fixed inset-0 bg-black/40 z-40 lg:hidden" />
       )}
 
-      {/* Menú Lateral Responsive */}
+      {/* Menú Lateral */}
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-50
-        w-64 bg-white border-r border-gray-200 flex flex-col justify-between
+        w-64 bg-white border-r border-zinc-200 flex flex-col justify-between
         transform transition-transform duration-300 ease-in-out shrink-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <div>
-          <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200">
-            <span className="text-xl font-bold text-blue-900">Agencia PropTech</span>
-            <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-500 hover:text-gray-800 p-1">
-              <X size={20} />
+          <div className="h-16 flex items-center justify-between px-6 border-b border-zinc-100">
+            <span className="text-sm font-semibold tracking-wider text-zinc-900 uppercase">Agencia PropTech</span>
+            <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-zinc-400 hover:text-zinc-700 p-1">
+              <X size={18} />
             </button>
           </div>
-          <nav className="p-4 space-y-1 overflow-y-auto max-h-[calc(100vh-140px)]">
+          <nav className="p-3 space-y-0.5 overflow-y-auto max-h-[calc(100vh-220px)]">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = location.pathname === link.to;
@@ -71,13 +76,11 @@ export default function Layout() {
                   key={link.to} 
                   to={link.to} 
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100'}`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium transition-colors ${isActive ? 'bg-zinc-900 text-white' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'}`}
                 >
-                  <Icon size={18} /> {link.label}
+                  <Icon size={16} /> {link.label}
                   {link.badge && (
-                    <span className="ml-auto bg-red-100 text-red-600 py-0.5 px-2 rounded-full text-xs font-bold">
-                      {link.badge}
-                    </span>
+                    <span className="ml-auto bg-zinc-200 text-zinc-800 py-0.5 px-1.5 rounded text-[10px] font-bold">{link.badge}</span>
                   )}
                 </Link>
               );
@@ -85,40 +88,85 @@ export default function Layout() {
           </nav>
         </div>
 
-        {/* Copiloto de datos inferior */}
-        <div className="p-4 border-t border-gray-200 bg-gray-50/50 hidden lg:block">
-          <div className="flex items-center gap-2 mb-2 text-blue-900 font-semibold text-xs">
-            <Sparkles size={14} /> Copiloto de datos
-          </div>
-          <input 
-            type="text" 
-            placeholder="Preguntá en lenguaje natural..." 
-            className="w-full px-3 py-1.5 border border-gray-300 rounded-lg text-xs focus:outline-none focus:border-blue-500 shadow-sm"
-          />
+        {/* Sección Inferior del Menú Lateral: Perfil y Logout */}
+        <div className="p-3 border-t border-zinc-100 bg-white">
+          <Link 
+            to="/perfil" 
+            onClick={() => setSidebarOpen(false)}
+            className={`flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium transition-colors ${location.pathname === '/perfil' ? 'bg-zinc-900 text-white' : 'text-zinc-600 hover:bg-zinc-100'}`}
+          >
+            <User size={16} /> Mi Perfil
+          </Link>
+          <button className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-xs font-medium text-red-600 hover:bg-red-50 transition-colors mt-0.5">
+            <LogOut size={16} /> Cerrar Sesión
+          </button>
         </div>
       </aside>
 
       {/* Contenido Principal */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 shrink-0">
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden bg-zinc-50/50 relative">
+        <header className="h-16 bg-white border-b border-zinc-200 flex items-center justify-between px-4 lg:px-8 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-lg shrink-0">
-              <Menu size={22} />
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 text-zinc-600 hover:bg-zinc-100 rounded-md shrink-0">
+              <Menu size={20} />
             </button>
-            <h1 className="text-base lg:text-xl font-bold text-gray-800 truncate">{getHeaderTitle()}</h1>
+            <h1 className="text-sm lg:text-base font-semibold text-zinc-900 tracking-tight truncate">{getHeaderTitle()}</h1>
           </div>
-          <div className="flex items-center gap-2 lg:gap-4 shrink-0">
-            <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full hidden sm:block" title="Idioma"><Globe size={18} /></button>
-            <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full hidden sm:block" title="Modo Oscuro"><Moon size={18} /></button>
-            <button className="relative p-2 text-gray-500 hover:bg-gray-100 rounded-full">
-              <Bell size={18} />
-              <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
-            <div className="h-8 w-8 bg-blue-900 text-white rounded-full flex items-center justify-center font-bold text-sm">AH</div>
+          
+          <div className="flex items-center gap-1.5 lg:gap-3 shrink-0">
+            {/* Desplegable de Idioma */}
+            <div className="relative">
+              <button onClick={() => setShowLang(!showLang)} className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-md hidden sm:block" title="Idioma">
+                <Globe size={16} />
+              </button>
+              {showLang && (
+                <div className="absolute right-0 mt-1 w-32 bg-white border border-zinc-200 rounded-md shadow-lg z-50 py-1">
+                  <button className="w-full text-left px-4 py-2 text-xs hover:bg-zinc-50 text-zinc-900 font-medium">🇪🇸 Español</button>
+                  <button className="w-full text-left px-4 py-2 text-xs hover:bg-zinc-50 text-zinc-600">🇬🇧 Inglés</button>
+                  <button className="w-full text-left px-4 py-2 text-xs hover:bg-zinc-50 text-zinc-600">🇧🇷 Portugués</button>
+                </div>
+              )}
+            </div>
+
+            <button className="p-2 text-zinc-500 hover:bg-zinc-100 rounded-md hidden sm:block" title="Modo Oscuro"><Moon size={16} /></button>
+            
+            {/* Desplegable de Notificaciones */}
+            <div className="relative">
+              <button onClick={() => setShowNotif(!showNotif)} className="relative p-2 text-zinc-500 hover:bg-zinc-100 rounded-md">
+                <Bell size={16} />
+                <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 bg-red-500 rounded-full"></span>
+              </button>
+              {showNotif && (
+                <div className="absolute right-0 mt-1 w-64 bg-white border border-zinc-200 rounded-md shadow-lg z-50">
+                  <div className="p-3 border-b border-zinc-100 font-bold text-xs">Notificaciones (3)</div>
+                  <div className="max-h-64 overflow-y-auto">
+                    <div className="p-3 border-b border-zinc-50 hover:bg-zinc-50 text-xs">
+                      <p className="font-bold text-zinc-900">Reserva por vencer</p>
+                      <p className="text-zinc-500 text-[10px]">Corrientes 1200 vence en 24hs</p>
+                    </div>
+                    <div className="p-3 border-b border-zinc-50 hover:bg-zinc-50 text-xs">
+                      <p className="font-bold text-zinc-900">Documentación</p>
+                      <p className="text-zinc-500 text-[10px]">Falta título en Rivadavia 4820</p>
+                    </div>
+                    <div className="p-3 hover:bg-zinc-50 text-xs">
+                      <p className="font-bold text-zinc-900">Nuevo Lead</p>
+                      <p className="text-zinc-500 text-[10px]">Roberto consultó por alquiler</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="h-7 w-7 bg-zinc-900 text-white rounded-md flex items-center justify-center font-bold text-xs tracking-wider ml-1">AH</div>
           </div>
         </header>
 
-        <div className="flex-1 overflow-auto min-w-0">
+        {/* Overlay invisible para cerrar dropdowns al hacer clic afuera */}
+        {(showLang || showNotif) && (
+          <div className="absolute inset-0 z-40" onClick={() => { setShowLang(false); setShowNotif(false); }}></div>
+        )}
+
+        <div className="flex-1 overflow-auto min-w-0 z-10 relative">
           <Outlet />
         </div>
       </main>

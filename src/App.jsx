@@ -11,6 +11,7 @@ import Incidencias from './Incidencias';
 import Metricas from './Metricas';
 import RedesSociales from './RedesSociales';
 import Configuracion from './Configuracion';
+import Perfil from './Perfil'; // <-- Importado
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="incidencias" element={<Incidencias />} />
           <Route path="redes" element={<RedesSociales />} />
           <Route path="configuracion" element={<Configuracion />} />
+          <Route path="perfil" element={<Perfil />} /> {/* <-- Nueva Ruta */}
         </Route>
       </Routes>
     </HashRouter>

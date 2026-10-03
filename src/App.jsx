@@ -29,7 +29,7 @@ const PantallaEnConstruccion = ({ nombre }) => (
 
 export default function App() {
   return (
-    <BrowserRouter basename="/zxcvbnm">
+    <HashRouter basename="/zxcvbnm">
       <Routes>
         {/* APPS MÓVILES INDEPENDIENTES */}
         <Route path="/inquilino" element={<AppInquilino />} />
@@ -56,6 +56,6 @@ export default function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
